@@ -1,0 +1,208 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      <ion-icon name="calendar-outline" slot="start"></ion-icon>
+      Mis Citas
+    </ion-title>
+    <ion-buttons slot="end" *ngIf="currentUser?.role === 'paciente'">
+      <ion-button (click)="navigateToCreateAppointment()" fill="clear">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="appointments-content">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Mis Citas Médicas</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Refresher -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingText="Desliza para actualizar" refreshingText="Actualizando...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner></ion-spinner>
+    <p>Cargando citas...</p>
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="!isLoading" class="content-container">
+    
+    <!-- Header info for user role -->
+    <ion-card color="light" class="info-card">
+      <ion-card-content>
+        <div class="user-info">
+          <ion-icon name="person-circle-outline" size="large"></ion-icon>
+          <div>
+            <h3>{{ currentUser?.first_name }} {{ currentUser?.last_name }}</h3>
+            <p>{{ currentUser?.role === 'paciente' ? 'Paciente' : 'Médico' }}</p>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Patient Actions -->
+    <div *ngIf="currentUser?.role === 'paciente'" class="actions-section">
+      <ion-button 
+        expand="block" 
+        fill="solid" 
+        color="primary"
+        (click)="navigateToCreateAppointment()">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Agendar Nueva Cita
+      </ion-button>
+    </div>
+
+    <!-- Segment for past/upcoming -->
+    <ion-segment value="upcoming" (ionChange)="onSegmentChanged($event)" class="appointments-segment">
+      <ion-segment-button value="upcoming">
+        <ion-label>Próximas</ion-label>
+        <ion-badge *ngIf="getUpcomingAppointments().length > 0">
+          {{ getUpcomingAppointments().length }}
+        </ion-badge>
+      </ion-segment-button>
+      <ion-segment-button value="past">
+        <ion-label>Pasadas</ion-label>
+        <ion-badge *ngIf="getPastAppointments().length > 0">
+          {{ getPastAppointments().length }}
+        </ion-badge>
+      </ion-segment-button>
+    </ion-segment>
+
+    <!-- Upcoming Appointments -->
+    <div *ngIf="selectedSegment === 'upcoming'">
+      <div *ngIf="getUpcomingAppointments().length === 0" class="empty-state">
+        <ion-icon name="calendar-outline" size="large"></ion-icon>
+        <h3>No tienes citas próximas</h3>
+        <p *ngIf="currentUser?.role === 'paciente'">
+          ¡Agenda tu primera cita médica!
+        </p>
+        <p *ngIf="currentUser?.role === 'médico'">
+          No tienes citas programadas proximamente.
+        </p>
+        <ion-button 
+          *ngIf="currentUser?.role === 'paciente'"
+          fill="outline" 
+          (click)="navigateToCreateAppointment()">
+          <ion-icon name="add-outline" slot="start"></ion-icon>
+          Agendar Cita
+        </ion-button>
+      </div>
+
+      <div *ngIf="getUpcomingAppointments().length > 0" class="appointments-list">
+        <ion-card 
+          *ngFor="let appointment of getUpcomingAppointments()" 
+          class="appointment-card upcoming">
+          <ion-card-content>
+            <div class="appointment-header">
+              <div class="appointment-info">
+                <h3>{{ appointment.title }}</h3>
+                <p class="description" *ngIf="appointment.description">
+                  {{ appointment.description }}
+                </p>
+              </div>
+              <div class="appointment-status">
+                <ion-badge color="success">Próxima</ion-badge>
+              </div>
+            </div>
+
+            <div class="appointment-details">
+              <div class="detail-item">
+                <ion-icon name="calendar-outline" color="primary"></ion-icon>
+                <span>{{ formatDate(appointment.appointment_datetime) }}</span>
+              </div>
+              <div class="detail-item">
+                <ion-icon name="time-outline" color="primary"></ion-icon>
+                <span>{{ formatTime(appointment.appointment_datetime) }}</span>
+              </div>
+              <div class="detail-item">
+                <ion-icon name="hourglass-outline" color="primary"></ion-icon>
+                <span>{{ appointment.duration_minutes }} minutos</span>
+              </div>
+              <div class="detail-item" *ngIf="currentUser?.role === 'paciente'">
+                <ion-icon name="person-outline" color="primary"></ion-icon>
+                <span>Dr. {{ appointment.doctor_info?.first_name }} {{ appointment.doctor_info?.last_name }}</span>
+              </div>
+              <div class="detail-item" *ngIf="currentUser?.role === 'médico'">
+                <ion-icon name="person-outline" color="primary"></ion-icon>
+                <span>{{ appointment.patient_info?.first_name }} {{ appointment.patient_info?.last_name }}</span>
+              </div>
+            </div>
+
+            <!-- Actions for patients -->
+            <div *ngIf="currentUser?.role === 'paciente'" class="appointment-actions">
+              <ion-button 
+                fill="clear" 
+                size="small" 
+                color="primary"
+                (click)="editAppointment(appointment)">
+                <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+              <ion-button 
+                fill="clear" 
+                size="small" 
+                color="danger"
+                (click)="cancelAppointment(appointment)">
+                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- Past Appointments -->
+    <div *ngIf="selectedSegment === 'past'">
+      <div *ngIf="getPastAppointments().length === 0" class="empty-state">
+        <ion-icon name="archive-outline" size="large"></ion-icon>
+        <h3>No tienes citas pasadas</h3>
+        <p>Tu historial de citas aparecerá aquí.</p>
+      </div>
+
+      <div *ngIf="getPastAppointments().length > 0" class="appointments-list">
+        <ion-card 
+          *ngFor="let appointment of getPastAppointments()" 
+          class="appointment-card past">
+          <ion-card-content>
+            <div class="appointment-header">
+              <div class="appointment-info">
+                <h3>{{ appointment.title }}</h3>
+                <p class="description" *ngIf="appointment.description">
+                  {{ appointment.description }}
+                </p>
+              </div>
+              <div class="appointment-status">
+                <ion-badge color="medium">Completada</ion-badge>
+              </div>
+            </div>
+
+            <div class="appointment-details">
+              <div class="detail-item">
+                <ion-icon name="calendar-outline" color="medium"></ion-icon>
+                <span>{{ formatDate(appointment.appointment_datetime) }}</span>
+              </div>
+              <div class="detail-item">
+                <ion-icon name="time-outline" color="medium"></ion-icon>
+                <span>{{ formatTime(appointment.appointment_datetime) }}</span>
+              </div>
+              <div class="detail-item" *ngIf="currentUser?.role === 'paciente'">
+                <ion-icon name="person-outline" color="medium"></ion-icon>
+                <span>Dr. {{ appointment.doctor_info?.first_name }} {{ appointment.doctor_info?.last_name }}</span>
+              </div>
+              <div class="detail-item" *ngIf="currentUser?.role === 'médico'">
+                <ion-icon name="person-outline" color="medium"></ion-icon>
+                <span>{{ appointment.patient_info?.first_name }} {{ appointment.patient_info?.last_name }}</span>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+  </div>
+</ion-content>

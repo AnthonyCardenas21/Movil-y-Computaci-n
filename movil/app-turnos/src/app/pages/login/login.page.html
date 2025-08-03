@@ -1,0 +1,76 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      <ion-icon name="heart-outline" slot="start"></ion-icon>
+      Turnos Médicos
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="login-content">
+  <div class="login-container">
+    <!-- Logo/Header Section -->
+    <div class="header-section">
+      <ion-icon name="heart-outline" size="large" color="primary"></ion-icon>
+      <h1>Bienvenido</h1>
+      <p>Inicia sesión para gestionar tus turnos médicos</p>
+    </div>
+
+    <!-- Login Form -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <ion-card>
+        <ion-card-content>
+          <!-- Email Field -->
+          <ion-item lines="full" class="form-item">
+            <ion-icon name="mail-outline" slot="start" color="medium"></ion-icon>
+            <ion-label position="stacked">Email</ion-label>
+            <ion-input
+              type="email"
+              formControlName="email"
+              placeholder="tu-email@ejemplo.com"
+              [class.invalid]="isFieldInvalid('email')">
+            </ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="isFieldInvalid('email')">
+            {{ getFieldError('email') }}
+          </div>
+
+          <!-- Password Field -->
+          <ion-item lines="full" class="form-item">
+            <ion-icon name="lock-closed-outline" slot="start" color="medium"></ion-icon>
+            <ion-label position="stacked">Contraseña</ion-label>
+            <ion-input
+              type="password"
+              formControlName="password"
+              placeholder="Tu contraseña"
+              [class.invalid]="isFieldInvalid('password')">
+            </ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="isFieldInvalid('password')">
+            {{ getFieldError('password') }}
+          </div>
+
+          <!-- Login Button -->
+          <ion-button
+            expand="block"
+            type="submit"
+            [disabled]="loginForm.invalid || isLoading"
+            class="login-button">
+            <ion-icon name="enter-outline" slot="start" *ngIf="!isLoading"></ion-icon>
+            <ion-spinner name="circles" *ngIf="isLoading"></ion-spinner>
+            {{ isLoading ? 'Iniciando...' : 'Iniciar Sesión' }}
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </form>
+
+    <!-- Register Link -->
+    <div class="register-section">
+      <p>¿No tienes cuenta?</p>
+      <ion-button fill="clear" (click)="navigateToRegister()">
+        <ion-icon name="person-add-outline" slot="start"></ion-icon>
+        Registrarse
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

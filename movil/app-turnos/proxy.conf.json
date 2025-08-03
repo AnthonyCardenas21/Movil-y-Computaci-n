@@ -1,0 +1,20 @@
+{
+  "/api/auth/*": {
+    "target": "http://localhost:8001",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/auth": ""
+    }
+  },
+  "/api/appointments/*": {
+    "target": "http://localhost:8002",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/appointments": ""
+    }
+  }
+}

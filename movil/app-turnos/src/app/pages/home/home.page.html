@@ -1,0 +1,157 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Sistema de Turnos Médicos
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()" fill="clear">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Inicio</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="home-content" *ngIf="!isLoading">
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <div class="greeting-card">
+        <ion-card>
+          <ion-card-content>
+            <div class="greeting-content">
+              <div class="greeting-text">
+                <h2>{{ getGreeting() }}, {{ user?.first_name }}!</h2>
+                <p class="role-badge">{{ getRoleLabel() }}</p>
+                <p class="welcome-message" *ngIf="user?.role === 'paciente'">
+                  ¿Necesitas agendar una consulta médica?
+                </p>
+                <p class="welcome-message" *ngIf="user?.role === 'médico'">
+                  Revisa tu agenda de consultas para hoy
+                </p>
+              </div>
+              <div class="greeting-icon">
+                <ion-icon 
+                  [name]="user?.role === 'médico' ? 'medical-outline' : 'person-outline'"
+                  color="primary">
+                </ion-icon>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions-section">
+      <h3>Acciones Rápidas</h3>
+      <div class="actions-grid">
+        <ion-card class="action-card" (click)="bookAppointment()" *ngIf="user?.role === 'paciente'">
+          <ion-card-content>
+            <div class="action-content">
+              <ion-icon name="calendar-outline" color="success"></ion-icon>
+              <h4>Agendar Cita</h4>
+              <p>Reserva tu próxima consulta</p>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="action-card" (click)="navigateToAppointments()">
+          <ion-card-content>
+            <div class="action-content">
+              <ion-icon name="list-outline" color="primary"></ion-icon>
+              <h4>Mis {{ user?.role === 'médico' ? 'Consultas' : 'Citas' }}</h4>
+              <p>Ver todas las citas</p>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="action-card" (click)="navigateToProfile()">
+          <ion-card-content>
+            <div class="action-content">
+              <ion-icon name="person-circle-outline" color="secondary"></ion-icon>
+              <h4>Mi Perfil</h4>
+              <p>Actualizar información</p>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- Upcoming Appointments -->
+    <div class="upcoming-section" *ngIf="upcomingAppointments.length > 0">
+      <div class="section-header">
+        <h3>Próximas {{ user?.role === 'médico' ? 'Consultas' : 'Citas' }}</h3>
+        <ion-button fill="clear" (click)="navigateToAppointments()">
+          Ver todas
+          <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+        </ion-button>
+      </div>
+      
+      <div class="appointments-list">
+        <ion-card *ngFor="let appointment of upcomingAppointments" class="appointment-card">
+          <ion-card-content>
+            <div class="appointment-info">
+              <div class="appointment-date">
+                <ion-icon name="calendar-outline" color="primary"></ion-icon>
+                <div class="date-info">
+                  <span class="date">{{ appointment.appointment_datetime | date:'dd/MM/yyyy' }}</span>
+                  <span class="time">{{ appointment.appointment_datetime | date:'HH:mm' }}</span>
+                </div>
+              </div>
+              <div class="appointment-details">
+                <h4 *ngIf="user?.role === 'paciente'">
+                  Dr/a. {{ appointment.doctor_info?.first_name }} {{ appointment.doctor_info?.last_name }}
+                </h4>
+                <h4 *ngIf="user?.role === 'médico'">
+                  {{ appointment.patient_info?.first_name }} {{ appointment.patient_info?.last_name }}
+                </h4>
+                <p class="specialty" *ngIf="appointment.description">
+                  {{ appointment.description }}
+                </p>
+                <span class="status-badge" [class.confirmed]="appointment.status === 'confirmada'">
+                  Programada
+                </span>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="upcomingAppointments.length === 0">
+      <ion-card>
+        <ion-card-content>
+          <div class="empty-content">
+            <ion-icon name="calendar-clear-outline" size="large" color="medium"></ion-icon>
+            <h3>No hay citas próximas</h3>
+            <p *ngIf="user?.role === 'paciente'">
+              ¡Agenda tu próxima consulta médica!
+            </p>
+            <p *ngIf="user?.role === 'médico'">
+              No tienes consultas programadas próximamente
+            </p>
+            <ion-button 
+              expand="block" 
+              (click)="bookAppointment()" 
+              *ngIf="user?.role === 'paciente'">
+              Agendar Primera Cita
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isLoading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando información...</p>
+  </div>
+</ion-content>

@@ -1,0 +1,211 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Mi Perfil</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()" fill="clear" color="danger">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Perfil</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="profile-content" *ngIf="!isLoading">
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <div class="avatar-section">
+        <div class="avatar">
+          <ion-icon 
+            [name]="user?.role === 'médico' ? 'medical-outline' : 'person-outline'"
+            size="large">
+          </ion-icon>
+        </div>
+        <div class="user-info">
+          <h2>{{ user?.first_name }} {{ user?.last_name }}</h2>
+          <p class="role-badge">{{ getRoleLabel() }}</p>
+          <p class="email">{{ user?.email }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Form -->
+    <div class="profile-form">
+      <div class="form-header">
+        <h3>Información Personal</h3>
+        <ion-button 
+          fill="clear" 
+          (click)="toggleEdit()" 
+          *ngIf="!isEditing">
+          <ion-icon name="create-outline" slot="start"></ion-icon>
+          Editar
+        </ion-button>
+        <div class="edit-actions" *ngIf="isEditing">
+          <ion-button fill="clear" (click)="toggleEdit()">
+            Cancelar
+          </ion-button>
+          <ion-button (click)="saveProfile()" color="primary">
+            Guardar
+          </ion-button>
+        </div>
+      </div>
+
+      <form [formGroup]="profileForm">
+        <ion-card>
+          <ion-card-content>
+            <!-- Información básica -->
+            <div class="form-section">
+              <h4>Datos Básicos</h4>
+              
+              <!-- Nombres -->
+              <ion-item class="form-item" [class.invalid]="isFieldInvalid('nombres')">
+                <ion-label position="stacked">Nombres</ion-label>
+                <ion-input 
+                  type="text" 
+                  formControlName="nombres"
+                  [readonly]="!isEditing">
+                </ion-input>
+              </ion-item>
+              <div class="error-message" *ngIf="isFieldInvalid('nombres')">
+                {{ getFieldError('nombres') }}
+              </div>
+
+              <!-- Apellidos -->
+              <ion-item class="form-item" [class.invalid]="isFieldInvalid('apellidos')">
+                <ion-label position="stacked">Apellidos</ion-label>
+                <ion-input 
+                  type="text" 
+                  formControlName="apellidos"
+                  [readonly]="!isEditing">
+                </ion-input>
+              </ion-item>
+              <div class="error-message" *ngIf="isFieldInvalid('apellidos')">
+                {{ getFieldError('apellidos') }}
+              </div>
+
+              <!-- Teléfono -->
+              <ion-item class="form-item" [class.invalid]="isFieldInvalid('telefono')">
+                <ion-label position="stacked">Teléfono</ion-label>
+                <ion-input 
+                  type="tel" 
+                  formControlName="telefono"
+                  [readonly]="!isEditing">
+                </ion-input>
+              </ion-item>
+              <div class="error-message" *ngIf="isFieldInvalid('telefono')">
+                {{ getFieldError('telefono') }}
+              </div>
+
+              <!-- Dirección -->
+              <ion-item class="form-item" [class.invalid]="isFieldInvalid('direccion')">
+                <ion-label position="stacked">Dirección</ion-label>
+                <ion-textarea 
+                  formControlName="direccion"
+                  [readonly]="!isEditing"
+                  rows="2">
+                </ion-textarea>
+              </ion-item>
+              <div class="error-message" *ngIf="isFieldInvalid('direccion')">
+                {{ getFieldError('direccion') }}
+              </div>
+            </div>
+
+            <!-- Información médica (solo para médicos) -->
+            <div class="form-section" *ngIf="user?.role === 'médico'">
+              <h4>Información Profesional</h4>
+              
+              <!-- Especialidad -->
+              <ion-item class="form-item medico-field" [class.invalid]="isFieldInvalid('especialidad')">>
+                <ion-label position="stacked">Especialidad</ion-label>
+                <ion-select formControlName="especialidad" [disabled]="!isEditing">
+                  <ion-select-option *ngFor="let specialty of specialties" [value]="specialty">
+                    {{ specialty }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+              <div class="error-message" *ngIf="isFieldInvalid('especialidad')">
+                {{ getFieldError('especialidad') }}
+              </div>
+
+              <!-- Número de Licencia -->
+              <ion-item class="form-item medico-field" [class.invalid]="isFieldInvalid('numero_licencia')">>
+                <ion-label position="stacked">Número de Licencia Médica</ion-label>
+                <ion-input 
+                  type="text" 
+                  formControlName="numero_licencia"
+                  [readonly]="!isEditing">
+                </ion-input>
+              </ion-item>
+              <div class="error-message" *ngIf="isFieldInvalid('numero_licencia')">
+                {{ getFieldError('numero_licencia') }}
+              </div>
+            </div>
+
+            <!-- Información del sistema -->
+            <div class="form-section">
+              <h4>Información del Sistema</h4>
+              
+              <ion-item class="form-item readonly">
+                <ion-label position="stacked">Email</ion-label>
+                <ion-input type="email" [value]="user?.email" readonly></ion-input>
+              </ion-item>
+
+              <ion-item class="form-item readonly">
+                <ion-label position="stacked">Documento de Identidad</ion-label>
+                <ion-input [value]="user?.documento_identidad" readonly></ion-input>
+              </ion-item>
+
+              <ion-item class="form-item readonly">
+                <ion-label position="stacked">Fecha de Nacimiento</ion-label>
+                <ion-input [value]="user?.fecha_nacimiento | date:'dd/MM/yyyy'" readonly></ion-input>
+              </ion-item>
+
+              <ion-item class="form-item readonly">
+                <ion-label position="stacked">Miembro desde</ion-label>
+                <ion-input [value]="user?.created_at | date:'dd/MM/yyyy'" readonly></ion-input>
+              </ion-item>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </form>
+    </div>
+
+    <!-- Profile Actions -->
+    <div class="profile-actions">
+      <ion-card>
+        <ion-card-content>
+          <h4>Configuración de Cuenta</h4>
+          
+          <ion-item button (click)="changePassword()" class="action-item">
+            <ion-icon name="key-outline" slot="start" color="primary"></ion-icon>
+            <ion-label>
+              <h3>Cambiar Contraseña</h3>
+              <p>Actualiza tu contraseña de acceso</p>
+            </ion-label>
+            <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+          </ion-item>
+
+          <ion-item button (click)="logout()" class="action-item danger">
+            <ion-icon name="log-out-outline" slot="start" color="danger"></ion-icon>
+            <ion-label>
+              <h3>Cerrar Sesión</h3>
+              <p>Salir de la aplicación</p>
+            </ion-label>
+            <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isLoading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando perfil...</p>
+  </div>
+</ion-content>

@@ -1,0 +1,213 @@
+.register-content {
+  --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  
+  .register-container {
+    padding: 1rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .header-section {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: white;
+    padding-top: 1rem;
+
+    ion-icon {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin: 0.5rem 0;
+    }
+
+    p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      margin: 0;
+    }
+  }
+
+  .register-form {
+    flex: 1;
+    
+    ion-card {
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      margin: 0;
+
+      ion-card-content {
+        padding: 1.5rem;
+      }
+    }
+
+    .form-item {
+      margin-bottom: 0.25rem;
+      --border-radius: 8px;
+      --background: #f8f9fa;
+
+      &.invalid {
+        --border-color: var(--ion-color-danger);
+      }
+
+      ion-label {
+        font-weight: 500;
+        color: var(--ion-color-dark);
+        font-size: 0.9rem;
+      }
+
+      ion-input,
+      ion-textarea,
+      ion-select,
+      ion-datetime {
+        --padding-start: 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      ion-textarea {
+        min-height: 60px;
+      }
+    }
+
+    .error-message {
+      color: var(--ion-color-danger);
+      font-size: 0.75rem;
+      margin: 0.25rem 0 0.75rem 0;
+      padding-left: 1rem;
+    }
+
+    .doctor-fields {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e0e0e0;
+
+      .form-item {
+        background-color: #f0f4ff;
+        
+        ion-label {
+          color: var(--ion-color-primary);
+          font-weight: 600;
+        }
+      }
+    }
+
+    .register-button {
+      margin-top: 1.5rem;
+      --border-radius: 12px;
+      height: 48px;
+      font-weight: 600;
+      
+      ion-spinner {
+        --color: white;
+      }
+    }
+  }
+
+  .login-section {
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    color: white;
+
+    p {
+      margin-bottom: 0.5rem;
+      opacity: 0.9;
+      font-size: 0.9rem;
+    }
+
+    ion-button {
+      --color: white;
+      font-weight: 500;
+    }
+  }
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .register-content {
+    .register-form {
+      .form-item {
+        --background: var(--ion-color-dark);
+        --color: var(--ion-color-light);
+      }
+
+      .doctor-fields .form-item {
+        background-color: rgba(var(--ion-color-primary-rgb), 0.1);
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 576px) {
+  .register-content {
+    .register-container {
+      padding: 0.5rem;
+    }
+
+    .header-section {
+      padding-top: 0.5rem;
+      
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      ion-icon {
+        font-size: 2.5rem;
+      }
+    }
+
+    .register-form {
+      ion-card-content {
+        padding: 1rem;
+      }
+
+      .form-item {
+        ion-label {
+          font-size: 0.85rem;
+        }
+
+        ion-input,
+        ion-textarea,
+        ion-select,
+        ion-datetime {
+          font-size: 0.85rem;
+        }
+      }
+
+      .error-message {
+        font-size: 0.7rem;
+        padding-left: 0.5rem;
+      }
+    }
+  }
+}
+
+// Additional styles for better UX
+.form-item {
+  transition: all 0.3s ease;
+
+  &:focus-within {
+    --background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.register-button {
+  transition: all 0.3s ease;
+
+  &:hover:not([disabled]) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  &[disabled] {
+    opacity: 0.7;
+  }
+}

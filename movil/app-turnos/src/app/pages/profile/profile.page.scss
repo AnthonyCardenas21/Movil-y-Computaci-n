@@ -1,0 +1,283 @@
+.profile-content {
+  padding: 1rem;
+  
+  .profile-header {
+    margin-bottom: 1.5rem;
+    
+    .avatar-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-secondary) 100%);
+      border-radius: 16px;
+      color: white;
+      
+      .avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        ion-icon {
+          font-size: 2.5rem;
+        }
+      }
+      
+      .user-info {
+        flex: 1;
+        
+        h2 {
+          margin: 0 0 0.5rem 0;
+          font-size: 1.3rem;
+          font-weight: 600;
+        }
+        
+        .role-badge {
+          background: rgba(255, 255, 255, 0.2);
+          padding: 0.25rem 0.75rem;
+          border-radius: 12px;
+          font-size: 0.8rem;
+          font-weight: 500;
+          display: inline-block;
+          margin-bottom: 0.5rem;
+        }
+        
+        .email {
+          margin: 0;
+          opacity: 0.9;
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+  
+  .profile-form {
+    margin-bottom: 1.5rem;
+    
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      
+      h3 {
+        margin: 0;
+        color: var(--ion-color-dark);
+        font-weight: 600;
+      }
+      
+      .edit-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+    }
+    
+    ion-card {
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      
+      .form-section {
+        margin-bottom: 1.5rem;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+        
+        h4 {
+          margin: 0 0 1rem 0;
+          color: var(--ion-color-primary);
+          font-weight: 600;
+          font-size: 1rem;
+          padding-bottom: 0.5rem;
+          border-bottom: 1px solid var(--ion-color-light);
+        }
+        
+        .form-item {
+          margin-bottom: 0.25rem;
+          --border-radius: 8px;
+          --background: #f8f9fa;
+          
+          &.invalid {
+            --border-color: var(--ion-color-danger);
+          }
+          
+          &.readonly {
+            --background: var(--ion-color-light);
+            opacity: 0.7;
+          }
+          
+          &.doctor-field {
+            background-color: rgba(var(--ion-color-primary-rgb), 0.05);
+            
+            ion-label {
+              color: var(--ion-color-primary);
+              font-weight: 600;
+            }
+          }
+          
+          ion-label {
+            font-weight: 500;
+            color: var(--ion-color-dark);
+            font-size: 0.9rem;
+          }
+          
+          ion-input,
+          ion-textarea,
+          ion-select {
+            --padding-start: 0.5rem;
+            font-size: 0.9rem;
+          }
+          
+          ion-textarea {
+            min-height: 60px;
+          }
+        }
+        
+        .error-message {
+          color: var(--ion-color-danger);
+          font-size: 0.75rem;
+          margin: 0.25rem 0 0.75rem 1rem;
+        }
+      }
+    }
+  }
+  
+  .profile-actions {
+    ion-card {
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      
+      h4 {
+        margin: 0 0 1rem 0;
+        color: var(--ion-color-dark);
+        font-weight: 600;
+        font-size: 1rem;
+      }
+      
+      .action-item {
+        --background: transparent;
+        --border-color: transparent;
+        margin-bottom: 0.5rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          --background: var(--ion-color-light);
+        }
+        
+        &.danger:hover {
+          --background: rgba(var(--ion-color-danger-rgb), 0.1);
+        }
+        
+        ion-label {
+          h3 {
+            margin: 0 0 0.25rem 0;
+            font-size: 0.9rem;
+            font-weight: 600;
+          }
+          
+          p {
+            margin: 0;
+            font-size: 0.75rem;
+            color: var(--ion-color-medium);
+          }
+        }
+      }
+    }
+  }
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  gap: 1rem;
+  
+  p {
+    color: var(--ion-color-medium);
+    font-size: 0.9rem;
+  }
+}
+
+// Responsive design
+@media (max-width: 576px) {
+  .profile-content {
+    padding: 0.5rem;
+    
+    .profile-header .avatar-section {
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+      
+      .avatar {
+        width: 100px;
+        height: 100px;
+        
+        ion-icon {
+          font-size: 3rem;
+        }
+      }
+    }
+    
+    .profile-form .form-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+      
+      .edit-actions {
+        align-self: stretch;
+        justify-content: space-between;
+        
+        ion-button {
+          flex: 1;
+          margin: 0 0.25rem;
+        }
+      }
+    }
+  }
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .profile-content {
+    .profile-header .avatar-section {
+      background: linear-gradient(135deg, var(--ion-color-primary-shade) 0%, var(--ion-color-secondary-shade) 100%);
+    }
+    
+    .profile-form .form-section .form-item {
+      &:not(.readonly) {
+        --background: var(--ion-color-dark);
+        --color: var(--ion-color-light);
+      }
+      
+      &.doctor-field {
+        background-color: rgba(var(--ion-color-primary-rgb), 0.1);
+      }
+    }
+  }
+}
+
+// Form transitions
+.form-item {
+  transition: all 0.3s ease;
+  
+  &:focus-within {
+    --background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Button animations
+ion-button {
+  transition: all 0.3s ease;
+  
+  &:hover:not([disabled]) {
+    transform: translateY(-1px);
+  }
+}

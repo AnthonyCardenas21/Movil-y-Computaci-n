@@ -65,4 +65,6 @@ alembic/versions/*
 !alembic/versions/.gitkeep
 
 #movil
-movil/*
+movil/app-turnos/node_modules
+movil/app-turnos/.vscode
+movil/app-turnos/angular

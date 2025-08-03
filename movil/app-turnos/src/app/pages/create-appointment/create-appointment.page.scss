@@ -1,0 +1,242 @@
+.create-appointment-content {
+  --background: #f5f5f5;
+  color: #000000; // Asegurar texto negro por defecto
+}
+
+.appointment-container {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.header-section {
+  text-align: center;
+  margin-bottom: 30px;
+  
+  ion-icon {
+    font-size: 4rem;
+    margin-bottom: 15px;
+  }
+  
+  h1 {
+    color: #3880ff; // Color azul fijo en lugar de variable
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+  }
+  
+  p {
+    color: #666666; // Color gris fijo
+    font-size: 1rem;
+    margin: 0;
+  }
+}
+
+.appointment-form {
+  ion-card {
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --background: #ffffff; // Fondo blanco para la card
+  }
+  
+  ion-card-content {
+    --background: #ffffff;
+    background: #ffffff;
+  }
+}
+
+.form-item {
+  margin-bottom: 15px;
+  
+  ion-item {
+    --background: #ffffff;
+    --color: #000000; // Texto negro
+  }
+  
+  ion-label {
+    font-weight: 500;
+    color: #ffffff !important; // Color oscuro fijo
+  }
+  
+  ion-input, ion-select, ion-textarea {
+    --background: #f9f9f9;
+    --color: #000000 !important; // Texto negro
+    --border-radius: 8px;
+    --padding-start: 15px;
+    --padding-end: 15px;
+    color: #000000 !important; // Asegurar texto negro
+  }
+  
+  // Estilos específicos para inputs
+  ion-input {
+    color: #000000 !important;
+  }
+  
+  ion-textarea {
+    color: #000000 !important;
+  }
+  
+  ion-select {
+    color: #000000 !important;
+  }
+  
+  &.invalid {
+    ion-input, ion-select, ion-textarea {
+      --border-color: #dc3545;
+      --color: #dc3545;
+    }
+  }
+}
+
+.error-message {
+  color: #dc3545; // Color rojo fijo
+  font-size: 0.85rem;
+  margin-top: 5px;
+  margin-left: 40px;
+  font-weight: 500;
+}
+
+.create-appointment-button {
+  margin-top: 30px;
+  height: 50px;
+  font-weight: bold;
+  --border-radius: 25px;
+}
+
+ion-datetime-button {
+  width: 100%;
+  --color: #000000; // Texto negro
+  color: #000000 !important;
+  
+  // Estilos específicos para el botón de datetime
+  ion-button {
+    --color: #000000 !important;
+    color: #000000 !important;
+  }
+}
+
+// Estilos más específicos para datetime buttons
+ion-datetime-button::part(native) {
+  color: #000000 !important;
+}
+
+ion-datetime-button ion-button {
+  --color: #000000 !important;
+  color: #000000 !important;
+}
+
+// Estilos para el modal de datetime
+ion-modal {
+  ion-datetime {
+    --background: #ffffff;
+    color: #000000;
+    
+    // Estilos para los números y texto en el datetime picker
+    .calendar-day {
+      color: #000000 !important;
+    }
+    
+    .calendar-month-year {
+      color: #000000 !important;
+    }
+  }
+}
+
+// Estilos específicos para ion-select
+ion-select {
+  color: #000000 !important;
+  
+  &::part(placeholder) {
+    color: #666666 !important;
+  }
+  
+  &::part(text) {
+    color: #000000 !important;
+  }
+}
+
+// Asegurar que el popover del select también tenga texto visible
+.select-popover {
+  ion-item {
+    color: #000000 !important;
+  }
+  
+  ion-radio {
+    --color: #000000 !important;
+  }
+}
+
+// Estilos para las cards de información
+ion-card[color="light"] {
+  --background: #f8f9fa;
+  
+  ion-card-content {
+    --background: #f8f9fa;
+    background: #f8f9fa;
+    
+    h3 {
+      margin: 0 0 10px 0;
+      color: #3880ff !important; // Color azul fijo
+      font-size: 1.1rem;
+    }
+    
+    p {
+      margin: 0;
+      font-weight: 500;
+      color: #ffffff !important; // Color oscuro fijo
+    }
+  }
+}
+
+ion-card[color="warning"] {
+  --background: #fff3cd;
+  
+  ion-card-content {
+    --background: #fff3cd;
+    background: #fff3cd;
+    
+    h3 {
+      margin: 0 0 10px 0;
+      color: #856404 !important; // Color marrón para warning
+      font-size: 1rem;
+    }
+    
+    ul {
+      margin: 0;
+      padding-left: 20px;
+      
+      li {
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+        color: #856404 !important; // Color marrón para warning
+      }
+    }
+  }
+}
+
+// Asegurar que todos los elementos de formulario tengan texto negro
+ion-item {
+  --color: #000000 !important;
+  color: #000000 !important;
+  
+  ion-label {
+    color: #ffffff !important;
+  }
+  
+  ion-input, ion-textarea, ion-select {
+    color: #000000 !important;
+  }
+}
+
+// Estilos adicionales para asegurar legibilidad
+.appointment-form ion-item ion-input {
+  color: #000000 !important;
+}
+
+.appointment-form ion-item ion-textarea {
+  color: #000000 !important;
+}
+
+.appointment-form ion-item ion-select {
+  color: #000000 !important;
+}

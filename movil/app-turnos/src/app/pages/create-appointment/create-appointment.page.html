@@ -1,0 +1,160 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      <ion-icon name="calendar-outline" slot="start"></ion-icon>
+      Agendar Cita
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/appointments"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="create-appointment-content">
+  <div class="appointment-container">
+    <!-- Header Section -->
+    <div class="header-section">
+      <ion-icon name="calendar-outline" size="large" color="primary"></ion-icon>
+      <h1>Nueva Cita Médica</h1>
+      <p>Agenda tu cita con el médico de tu preferencia</p>
+    </div>
+
+    <!-- Appointment Form -->
+    <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()" class="appointment-form">
+      <ion-card>
+        <ion-card-content>
+          <!-- Título/Motivo -->
+          <ion-item lines="full" class="form-item">
+            <ion-icon name="document-text-outline" slot="start" color="medium"></ion-icon>
+            <ion-label position="stacked">Motivo de la Consulta</ion-label>
+            <ion-input
+              type="text"
+              formControlName="title"
+              placeholder="Ej: Consulta general, Dolor de cabeza, etc."
+              [class.invalid]="isFieldInvalid('title')">
+            </ion-input>
+          </ion-item>
+          <div class="error-message" *ngIf="isFieldInvalid('title')">
+            {{ getFieldError('title') }}
+          </div>
+
+          <!-- Descripción -->
+          <ion-item lines="full" class="form-item">
+            <ion-icon name="list-outline" slot="start" color="medium"></ion-icon>
+            <ion-label position="stacked">Descripción (Opcional)</ion-label>
+            <ion-textarea
+              formControlName="description"
+              placeholder="Describe tus síntomas o la razón de la consulta..."
+              rows="3">
+            </ion-textarea>
+          </ion-item>
+
+          <!-- Seleccionar Médico -->
+          <ion-item lines="full" class="form-item">
+            <ion-icon name="person-outline" slot="start" color="medium"></ion-icon>
+            <ion-label position="stacked">Médico</ion-label>
+            <ion-select 
+              formControlName="doctor_id" 
+              placeholder="Selecciona un médico"
+              [class.invalid]="isFieldInvalid('doctor_id')">
+              <ion-select-option 
+                *ngFor="let doctor of doctors" 
+                [value]="doctor.id">
+                Dr. {{ doctor.first_name }} {{ doctor.last_name }}
+                <span *ngIf="doctor.especialidad"> - {{ doctor.especialidad }}</span>
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div class="error-message" *ngIf="isFieldInvalid('doctor_id')">
+            {{ getFieldError('doctor_id') }}
+          </div>
+
+          <!-- Fecha -->
+          <ion-item lines="full" class="form-item">
+            <ion-icon name="calendar-outline" slot="start" color="medium"></ion-icon>
+            <ion-label position="stacked">Fecha</ion-label>
+            <ion-datetime-button datetime="appointment-date">
+            </ion-datetime-button>
+            <ion-modal [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime
+                  id="appointment-date"
+                  [min]="minDate"
+                  [max]="maxDate"
+                  presentation="date"
+                  (ionChange)="onDateChange($event)">
+                </ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </ion-item>
+
+          <!-- Hora -->
+          <ion-item lines="full" class="form-item">
+            <ion-icon name="time-outline" slot="start" color="medium"></ion-icon>
+            <ion-label position="stacked">Hora</ion-label>
+            <ion-datetime-button datetime="appointment-time">
+            </ion-datetime-button>
+            <ion-modal [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime
+                  id="appointment-time"
+                  presentation="time"
+                  (ionChange)="onTimeChange($event)">
+                </ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </ion-item>
+
+          <!-- Duración -->
+          <ion-item lines="full" class="form-item">
+            <ion-icon name="hourglass-outline" slot="start" color="medium"></ion-icon>
+            <ion-label position="stacked">Duración</ion-label>
+            <ion-select 
+              formControlName="duration_minutes" 
+              placeholder="Selecciona duración">
+              <ion-select-option value="30">30 minutos</ion-select-option>
+              <ion-select-option value="45">45 minutos</ion-select-option>
+              <ion-select-option value="60">1 hora</ion-select-option>
+              <ion-select-option value="90">1 hora 30 minutos</ion-select-option>
+              <ion-select-option value="120">2 horas</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <div class="error-message" *ngIf="isFieldInvalid('duration_minutes')">
+            {{ getFieldError('duration_minutes') }}
+          </div>
+
+          <!-- Fecha y Hora Seleccionada -->
+          <ion-card *ngIf="selectedDateTime" color="light">
+            <ion-card-content>
+              <h3>📅 Fecha y Hora Seleccionada:</h3>
+              <p>{{ formatDateTime(selectedDateTime) }}</p>
+            </ion-card-content>
+          </ion-card>
+
+          <!-- Crear Cita Button -->
+          <ion-button
+            expand="block"
+            type="submit"
+            [disabled]="appointmentForm.invalid || isLoading || !selectedDateTime"
+            class="create-appointment-button">
+            <ion-icon name="calendar-outline" slot="start" *ngIf="!isLoading"></ion-icon>
+            <ion-spinner name="circles" *ngIf="isLoading"></ion-spinner>
+            {{ isLoading ? 'Agendando...' : 'Agendar Cita' }}
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </form>
+
+    <!-- Notas importantes -->
+    <ion-card color="warning">
+      <ion-card-content>
+        <h3>📝 Notas importantes:</h3>
+        <ul>
+          <li>Las citas deben agendarse con al menos 1 hora de anticipación</li>
+          <li>Puedes modificar o cancelar tu cita hasta 2 horas antes</li>
+          <li>Si necesitas cancelar con menos tiempo, contacta directamente al médico</li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

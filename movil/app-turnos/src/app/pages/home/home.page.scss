@@ -1,0 +1,316 @@
+.home-content {
+  padding: 1rem;
+  
+  .welcome-section {
+    margin-bottom: 1.5rem;
+    
+    .greeting-card {
+      ion-card {
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-secondary) 100%);
+        
+        ion-card-content {
+          padding: 1.5rem;
+        }
+      }
+      
+      .greeting-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+        
+        .greeting-text {
+          flex: 1;
+          
+          h2 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.4rem;
+            font-weight: 600;
+          }
+          
+          .role-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+          }
+          
+          .welcome-message {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 0.9rem;
+          }
+        }
+        
+        .greeting-icon {
+          ion-icon {
+            font-size: 3rem;
+            opacity: 0.8;
+          }
+        }
+      }
+    }
+  }
+  
+  .quick-actions-section {
+    margin-bottom: 1.5rem;
+    
+    h3 {
+      margin: 0 0 1rem 0;
+      color: var(--ion-color-dark);
+      font-weight: 600;
+    }
+    
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      
+      .action-card {
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+        
+        ion-card-content {
+          padding: 1rem;
+          text-align: center;
+        }
+        
+        .action-content {
+          ion-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+          }
+          
+          h4 {
+            margin: 0 0 0.25rem 0;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--ion-color-dark);
+          }
+          
+          p {
+            margin: 0;
+            font-size: 0.75rem;
+            color: var(--ion-color-medium);
+          }
+        }
+      }
+    }
+  }
+  
+  .upcoming-section {
+    margin-bottom: 1.5rem;
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      
+      h3 {
+        margin: 0;
+        color: var(--ion-color-dark);
+        font-weight: 600;
+      }
+      
+      ion-button {
+        --color: var(--ion-color-primary);
+        font-size: 0.8rem;
+      }
+    }
+    
+    .appointments-list {
+      .appointment-card {
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 0.75rem;
+        
+        ion-card-content {
+          padding: 1rem;
+        }
+        
+        .appointment-info {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          
+          .appointment-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 100px;
+            
+            ion-icon {
+              font-size: 1.2rem;
+            }
+            
+            .date-info {
+              display: flex;
+              flex-direction: column;
+              
+              .date {
+                font-weight: 600;
+                font-size: 0.85rem;
+                color: var(--ion-color-dark);
+              }
+              
+              .time {
+                font-size: 0.75rem;
+                color: var(--ion-color-medium);
+              }
+            }
+          }
+          
+          .appointment-details {
+            flex: 1;
+            
+            h4 {
+              margin: 0 0 0.25rem 0;
+              font-size: 0.9rem;
+              font-weight: 600;
+              color: var(--ion-color-dark);
+            }
+            
+            .specialty {
+              margin: 0 0 0.25rem 0;
+              font-size: 0.75rem;
+              color: var(--ion-color-medium);
+            }
+            
+            .status-badge {
+              background: var(--ion-color-light);
+              color: var(--ion-color-medium);
+              padding: 0.2rem 0.5rem;
+              border-radius: 8px;
+              font-size: 0.7rem;
+              text-transform: capitalize;
+              
+              &.confirmed {
+                background: var(--ion-color-success);
+                color: white;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  .empty-state {
+    ion-card {
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      
+      .empty-content {
+        text-align: center;
+        padding: 2rem 1rem;
+        
+        ion-icon {
+          margin-bottom: 1rem;
+        }
+        
+        h3 {
+          margin: 0 0 0.5rem 0;
+          color: var(--ion-color-dark);
+          font-weight: 600;
+        }
+        
+        p {
+          margin: 0 0 1.5rem 0;
+          color: var(--ion-color-medium);
+        }
+        
+        ion-button {
+          --border-radius: 12px;
+        }
+      }
+    }
+  }
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  gap: 1rem;
+  
+  p {
+    color: var(--ion-color-medium);
+    font-size: 0.9rem;
+  }
+}
+
+// Responsive design
+@media (max-width: 576px) {
+  .home-content {
+    padding: 0.5rem;
+    
+    .welcome-section .greeting-card {
+      .greeting-content {
+        .greeting-text h2 {
+          font-size: 1.2rem;
+        }
+        
+        .greeting-icon ion-icon {
+          font-size: 2.5rem;
+        }
+      }
+    }
+    
+    .quick-actions-section .actions-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      
+      .action-card {
+        .action-content {
+          ion-icon {
+            font-size: 1.8rem;
+          }
+          
+          h4 {
+            font-size: 0.8rem;
+          }
+          
+          p {
+            font-size: 0.7rem;
+          }
+        }
+      }
+    }
+    
+    .upcoming-section .appointments-list .appointment-card {
+      .appointment-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        
+        .appointment-date {
+          min-width: auto;
+        }
+      }
+    }
+  }
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .home-content {
+    .welcome-section .greeting-card ion-card {
+      background: linear-gradient(135deg, var(--ion-color-primary-shade) 0%, var(--ion-color-secondary-shade) 100%);
+    }
+  }
+}
