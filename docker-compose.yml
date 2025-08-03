@@ -1,0 +1,81 @@
+services:
+  # Base de datos para el servicio de autenticación
+  auth_db:
+    image: postgres:15
+    container_name: auth_postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB_AUTH}
+      POSTGRES_USER: ${POSTGRES_USER_AUTH}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_AUTH}
+    ports:
+      - "5432:5432"
+    volumes:
+      - auth_data:/var/lib/postgresql/data
+    networks:
+      - medical_network
+
+  # Base de datos para el servicio de citas
+  appointments_db:
+    image: postgres:15
+    container_name: appointments_postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB_APPOINTMENTS}
+      POSTGRES_USER: ${POSTGRES_USER_APPOINTMENTS}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_APPOINTMENTS}
+    ports:
+      - "5433:5432"
+    volumes:
+      - appointments_data:/var/lib/postgresql/data
+    networks:
+      - medical_network
+
+  # Servicio de autenticación
+  auth_service:
+    build:
+      context: ./auth_service
+      dockerfile: Dockerfile
+    container_name: auth_service
+    ports:
+      - "${AUTH_SERVICE_PORT:-8001}:8000"
+    environment:
+      DATABASE_URL: ${DATABASE_URL_AUTH}
+      SECRET_KEY: ${SECRET_KEY}
+      ALGORITHM: ${ALGORITHM}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES}
+    depends_on:
+      - auth_db
+    networks:
+      - medical_network
+    volumes:
+      - ./auth_service:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Servicio de citas médicas
+  appointments_service:
+    build:
+      context: ./appointments_service
+      dockerfile: Dockerfile
+    container_name: appointments_service
+    ports:
+      - "${APPOINTMENTS_SERVICE_PORT:-8002}:8000"
+    environment:
+      DATABASE_URL: ${DATABASE_URL_APPOINTMENTS}
+      AUTH_SERVICE_URL: ${AUTH_SERVICE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      ALGORITHM: ${ALGORITHM}
+    depends_on:
+      - appointments_db
+      - auth_service
+    networks:
+      - medical_network
+    volumes:
+      - ./appointments_service:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  auth_data:
+  appointments_data:
+
+networks:
+  medical_network:
+    driver: bridge
